@@ -1,0 +1,27 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+// Standard OZ
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+/// @title BaseToken - token wdrożony w sieci Base
+/// @notice Token kompatybilny z kampaniami onchainowymi Base
+contract BaseToken is ERC20, Ownable {
+    /// @notice event emitowany podczas mintów pod kampanie Base (questy)
+    event BaseCampaignMint(address indexed to, uint256 amount, string campaignId);
+
+    constructor() ERC20("Base Token", "BASEX") Ownable(msg.sender) {
+        // opcjonalny premint
+        _mint(msg.sender, 1_000_000 * 10**decimals());
+    }
+
+    /// @dev Mintowanie tokenów pod questy, nagrody, kampanie Base
+    function mintCampaignReward(address to, uint256 amount, string calldata campaignId) 
+        external 
+        onlyOwner 
+    {
+        _mint(to, amount);
+        emit BaseCampaignMint(to, amount, campaignId);
+    }
+}
