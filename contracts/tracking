@@ -1,0 +1,6 @@
+/// @notice Event emitowany, gdy użytkownik wykonuje akcję kampanii
+event BaseQuestCompleted(address indexed user, string questId, uint256 timestamp);
+
+function completeQuest(string calldata questId) external {
+    emit BaseQuestCompleted(msg.sender, questId, block.timestamp);
+}
